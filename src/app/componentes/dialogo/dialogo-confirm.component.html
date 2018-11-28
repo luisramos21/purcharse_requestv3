@@ -1,0 +1,7 @@
+<div class="fixActionRow">
+    <h1 mat-dialog-title>{{data.title}}</h1>
+    <mat-dialog-actions align="end">
+        <button mat-button [color]="'defaut-color'" (click)="close()">Cancelar</button>
+        <button mat-button [color]="'success'" [mat-dialog-close]="data" cdkFocusInitial>Aceptar</button>
+      </mat-dialog-actions>
+</div>

@@ -1,0 +1,38 @@
+<div class="fixActionRow">
+  <h1 mat-dialog-title>{{data.title}}</h1>
+  <mat-dialog-content class="container-form">
+
+    <ng-container *ngFor="let element of data.form">
+
+      <div *ngIf="!element.type" style="width: 100%;">
+        <input  *ngIf="element.inputType" type="{{element.inputType}}" value="{{element.value}}">
+      </div>
+
+      <mat-form-field *ngIf="!element.type && !element.inputType">
+        <input matInput [(ngModel)]="element.value" [placeholder]="element.title">
+      </mat-form-field>
+
+      <mat-checkbox *ngIf="element.type =='checkbox'" [(ngModel)]="element.value">
+        {{element.title}}</mat-checkbox>
+
+      <mat-form-field *ngIf="element.type =='select'">
+        <mat-select placeholder="{{element.title}}" [(ngModel)]="element.value">
+
+          <mat-option *ngFor="let item of element['options']" [value]="item.value">
+            {{item.option}}
+          </mat-option>
+
+        </mat-select>
+      </mat-form-field>
+
+
+      <br *ngIf="element.type">
+      <br>
+    </ng-container>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button [color]="'defaut-color'" (click)="close()">Cancelar</button>
+    <button mat-button [color]="'success'" [mat-dialog-close]="data" cdkFocusInitial>Aceptar</button>
+  </mat-dialog-actions>
+</div>

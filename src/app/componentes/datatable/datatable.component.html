@@ -1,0 +1,69 @@
+<!--  DATOS PARA MOSTRAR-->
+<div class="responsive_table">
+
+  <ng-container class="mat-header-buttos-table">
+    <div style="float: left;">
+      <button disabled (click)="printComponent('printpage')" mat-raised-button>
+        <mat-icon>print</mat-icon> Imprimir
+      </button>
+      <button (click)="ExportarExcel()" mat-raised-button>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEOSURBVEhL7dO9SoNBEIXhVa9Ce2tLQbCwsNPCTrALiK13oI2Vt2FnpaawsRAFSZHLiJW34M+7yc6yzJ4hEFPmwAPfzpn9QghJq/w3mzjCFR4xwcJRL/sVFo56mWJRnXlHF7WoWFTX6qKWFB8/j/ZqcYNDfJXzAJflWV3082ivFqPpKaVbvM4e0wP8RTtHurTlMbZxgt0yM5Z2pnRpyzHWsI6XMjM+fh7t1SL7QH75BoZlZnz8PNqrxQ/2sI8D7OAb/qKdI12suJ+eUnrC8+wx3cFftHOkixUXOEX+JtkZzhFd9PNorxbz+Ph5tFeLeSyqa3VRS4pFdeYNXbaQ/2DXyD/wJ9TlpUZ96CrLTEp/27LgJ8D76zcAAAAASUVORK5CYII=">
+        Exportar
+      </button>
+    </div>
+    <div style="float: right;">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+      </mat-form-field>
+    </div>
+
+  </ng-container>
+
+  <div style="float: none;clear: both;" id="printpage">
+   
+    <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+      <!-- for each Columns-->
+      <ng-container *ngFor="let col of CustomColumns" [matColumnDef]="col.column">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>{{col.title}} </mat-header-cell>
+        <div *ngIf="col.action">
+          <mat-cell *matCellDef="let row">
+            <ng-container *ngIf="col.mrender(col.cell(row)) as value">
+
+              <button (click)='action("edit",value)' style="margin-right: 0.5em;" *ngIf="col.action_edit==true"
+                mat-icon-button mat-raised-button>
+                <mat-icon style="color:green;">edit</mat-icon>
+              </button>
+
+              <button (click)='action("remove",value)' style="margin-right: 0.5em;" *ngIf="col.action_remove==true"
+                mat-icon-button mat-raised-button>
+
+                <svg style="width:24px;height:24px;" viewBox="0 0 24 24">
+                  <path fill="#ff0000" d="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" />
+                </svg>
+              </button>
+
+              <button (click)='action("view",value)' style="margin-right: 0.5em;" *ngIf="col.action_remove==true"
+                mat-icon-button mat-raised-button>
+                <mat-icon style="color:blue;">info</mat-icon>
+              </button>
+
+            </ng-container>
+          </mat-cell>
+        </div>
+
+        <div *ngIf="!col.action">
+          <mat-cell *matCellDef="let row">
+            {{col.mrender(col.cell(row))}}</mat-cell>
+        </div>
+
+      </ng-container>
+
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+      <mat-row [ngClass]="{'highlight': row[column_state]==0}" *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [pageSizeOptions]="[10, 20,50,100]"  pageSize="20" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

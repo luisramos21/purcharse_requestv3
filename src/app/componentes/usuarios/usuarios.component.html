@@ -1,0 +1,6 @@
+
+<app-dialog #dialog (notify)='onNotify($event)'></app-dialog>
+
+<app-datatable  #datatable (notify)='onNotify($event)' [data]="TableData" [columns]="displayedColumns">
+
+</app-datatable>
