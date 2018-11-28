@@ -1,1 +1,97 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+.mat-list-item {
+    float: right;
+  }
+
+  .rotate-45 {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-header-buttos-table{
+  padding: 1em;
+  margin-bottom: 1em;
+}
+.mat-header-buttos-table button{
+margin: 0.5%;
+float: left;
+}
+.mat-header-buttos-table .search{
+  margin: 0.5%;
+  float: right;
+}
+
+.mat-row, .mat-header-row {
+  width: auto; 
+}
+.mat-header-row { 
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 1;
+  background-color: inherit;
+}
+
+.custom-modalbox  {
+  width: 25%;
+  height: 90%;
+}
+
+.custom-modalbox .fixActionRow mat-dialog-actions{
+  margin-top: 30%;
+  z-index: 999;
+}
+
+.mat-success {
+  background-color: green;
+  color: #fff;
+}
+.mat-defaut-color{
+  margin-right: 0.5em;
+  background-color:rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+@media(max-width: 800px) {
+  .responsive_table {
+      overflow-x: auto !important;
+  }
+
+  .custom-modalbox  {
+    width: 90%;
+    height: 70%;
+  }
+  .custom-modalbox .fixActionRow mat-dialog-actions{
+    margin-top: 24%;
+  }
+  .mat-table {
+      min-width:800px;
+  }
+}
+
+.container-form{
+  display: flex;
+  flex-direction: column;
+}
+.form-control{
+  widows: 100%;
+}
+.container-form > *{
+  width: 100%;
+}
+
+.highlight {
+  background:  rgba(211, 11, 11, 0.2); /* red */
+}
