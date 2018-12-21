@@ -6,7 +6,9 @@
   </button>
 
 </mat-toolbar>
-
+<div class="loading" *ngIf="show_progress">
+  <mat-progress-spinner mode="indeterminate" color="green"></mat-progress-spinner>
+</div>
 <mat-progress-bar mode="determinate" [value]="progress" color="warn"></mat-progress-bar>
 
 <!--Items for menu -->

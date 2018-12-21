@@ -1,7 +1,7 @@
 export class Api {
 
-    //public URL :string = "http://localhost:8081/api/purcharse_request/";  
-    public URL: string = "http://localhost/api/purcharse_request/";
+    public URL :string = "http://localhost:808/api/purcharse_request/";  
+    //public URL: string = "http://localhost/api/purcharse_request/";
     public _method: string = '';
     public data: {};
 

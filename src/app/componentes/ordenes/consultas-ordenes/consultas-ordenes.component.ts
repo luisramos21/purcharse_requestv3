@@ -32,28 +32,28 @@ export class ConsultasOrdenesComponent implements AfterViewInit {
     this.service.getOrdenesPendientes()
       .subscribe((data =>
         this.setDatatable(data, false))
-        , error => this.setDatatable({"data":[{}],"KEY":[]}, true));
+        , error => this.setDatatable({ "data": [{}], "KEY": [] }, true));
   }
-  DefColumns: string[] = [    
-      "I_req",
-      "N_req",
-      "Cant",
-      "Descripcion",
-      "Codigo_wo",
-      "Centro_Costo",
-      "Proveedor",
-      "PN_Proveedor",
-      "Fabricante",
-      "PN_Fabricante",
-      "Prioridad",
-      "F_requi",
-      "Usuario",
-      "Observaciones",
-      "Id" ];
+  DefColumns: string[] = [
+    "I_req",
+    "N_req",
+    "Cant",
+    "Descripcion",
+    "Codigo_wo",
+    "Centro_Costo",
+    "Proveedor",
+    "PN_Proveedor",
+    "Fabricante",
+    "PN_Fabricante",
+    "Prioridad",
+    "F_requi",
+    "Usuario",
+    "Observaciones",
+    "Id"];
 
-  setDatatable(data:{"data":[{}],"KEY":string[]}, error: boolean): void {
-    this.app_component.setProgress(30);    
-   
+  setDatatable(data: { "data": [{}], "KEY": string[] }, error: boolean): void {
+    this.app_component.setProgress(30);
+
     this.datatable.options__setDataKey = {
       'data': data,
       'actions': this.actions,
@@ -64,7 +64,6 @@ export class ConsultasOrdenesComponent implements AfterViewInit {
   }
 
   onNotify(options: {}): void {
-    console.log(options)
     this.app_component.test();
   }
 

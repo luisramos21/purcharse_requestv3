@@ -214,6 +214,7 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.app_component.setProgress(100);
+    this.app_component.show_progress = false;
   }
 
   applyFilter(filterValue: string) {

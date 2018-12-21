@@ -12,6 +12,7 @@ export class AppComponent {
   _Title = "Inicio";
   title = this._Title;
   @Input() progress: number = 0;
+  @Input() show_progress: boolean = true;
   _component: Component;
   /* 
     @onActivate if change component
@@ -50,7 +51,12 @@ export class AppComponent {
   }
   onDeactivate(component) {
     this.setProgress(0);
+    this.show_progress = true;
     //console.log("onDeactivate",component)
+  }
+
+  public setProgressSpinner(status: boolean): void {
+    this.show_progress = status;
   }
 
   routes: MenuInterface[] = [

@@ -19,6 +19,7 @@ import {
   MatInputModule,
   MatDividerModule,
   MatProgressBarModule  ,
+  MatProgressSpinnerModule,
   MatCheckboxModule,
   MatSelectModule
 } from '@angular/material/';
@@ -43,6 +44,7 @@ const PluginsModules =[
     HttpClientModule,
     MatProgressBarModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     MatCheckboxModule,
     MatSelectModule
 ];
