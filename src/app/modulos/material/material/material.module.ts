@@ -21,7 +21,11 @@ import {
   MatProgressBarModule  ,
   MatProgressSpinnerModule,
   MatCheckboxModule,
-  MatSelectModule
+  MatSelectModule,
+  MatDatepickerModule,
+  MatNativeDateModule ,
+  MatAutocompleteModule,
+  MatSnackBarModule
 } from '@angular/material/';
 
 const PluginsModules =[
@@ -46,7 +50,11 @@ const PluginsModules =[
     MatDialogModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatAutocompleteModule,
+    MatSnackBarModule
 ];
 
 

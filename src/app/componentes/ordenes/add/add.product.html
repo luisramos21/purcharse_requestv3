@@ -1,0 +1,88 @@
+<div class="fixActionRow">
+    <h1 mat-dialog-title>{{data.title}} </h1>
+    <div mat-dialog-content class="container-form form-new-order" style="max-height: 100%;">
+
+        <mat-form-field>
+            <input matInput   [(ngModel)]="data.product.fomplus_code" cdkFocusInitial (keyup)="BuscarCodigo($event)" [formControl]="myControl"
+            [matAutocomplete]="auto" placeholder="Codigo WO">
+
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{option.code_wo}} - {{option.descripction}}  
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput #Input_description [(ngModel)]="data.product.description" placeholder="Descripción : ">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput (keyup)="CheckCodigo($event)" (focus)="CheckCodigo($event)"  [(ngModel)]="data.product.manufacturer" placeholder="Fabricante : ">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput (keyup)="CheckCodigo($event)" (focus)="CheckCodigo($event)" [(ngModel)]="data.product.part_number" placeholder="PN Fabricante : ">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput (keyup)="CheckCodigo($event)" (focus)="CheckCodigo($event)" [(ngModel)]="data.product.provider" placeholder="Proveedor : ">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput (keyup)="CheckCodigo($event)" (focus)="CheckCodigo($event)"  [(ngModel)]="data.product.pn_provider" placeholder="PN Proveedor : ">
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput (keyup)="CheckCodigo($event)" (focus)="CheckCodigo($event)"  #Input_Qty type="number" [(ngModel)]="data.product.qty" placeholder="Cantidad : ">
+        </mat-form-field>
+
+        <div class="centre_cost">
+            <mat-form-field>
+                <mat-icon matPrefix>person</mat-icon>
+                <mat-select (selectionChange)="CenterCost($event)" #Input__cost_centre  title="Centro Costo" [(ngModel)]="data.CentreCoste" placeholder="Centro Costo">
+                    <mat-option [value]="cost.code" *ngFor="let cost  of data.centers_cost.cost_centers">{{cost.description}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field>
+                <mat-icon matPrefix>person</mat-icon>
+                <mat-select (selectionChange)="CenterCost($event)" #Input_sub_cost_centre  title="Centro Costo" [(ngModel)]="data.subCentreCoste" placeholder="sub centro de costo">
+                    <mat-option [value]="sub_cost.code" *ngFor="let sub_cost  of data.centers_cost.sub_cost_centers">{{sub_cost.description}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput disabled #Input_cost_centre [(ngModel)]="data.product.cost_centre" placeholder="Centro costo">
+            </mat-form-field>
+
+        </div>
+
+        <mat-form-field>
+            <mat-icon matPrefix>arrow_upward</mat-icon>
+            <mat-select #Input_priority_id title="Prioridad" [(ngModel)]="data.product.priority_id" placeholder="Prioridad">
+                <mat-option value="1">NORMAL</mat-option>
+                <mat-option value="3">MEDIA</mat-option>
+                <mat-option value="4">IMPORTACIÓN</mat-option>
+                <mat-option value="5">FECHA LIMITE</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="(data.product.priority_id != 5)? false : true">
+            <input matInput #Input_limit_date [matDatepicker]="picker" [(ngModel)]="data.product.limit_date" [disabled]="data.product.priority_id != 5"
+                placeholder="Fecha Limite">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+            <textarea [(ngModel)]="data.product.comments" matInput placeholder="Comentarios"></textarea>
+        </mat-form-field>
+    </div>
+
+    <mat-dialog-actions align="end">
+        <button mat-button [color]="'defaut-color'" (click)="close()">Cancelar</button>
+        <button mat-button [color]="'success'"  (click)="save()">Aceptar</button>
+    </mat-dialog-actions>
+    
+</div>

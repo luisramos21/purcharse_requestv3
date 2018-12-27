@@ -1,14 +1,28 @@
 import { Component, Input } from '@angular/core';
 import { MenuInterface } from './views/menu/menu-interface';
 import * as jsPDF from 'jspdf';
+import { MAT_DATE_FORMATS } from '@angular/material';
+
+
+export const YYYY_MM_DD_Format = {
+  parse: {
+      dateInput: 'LL',
+  },
+  display: {
+      dateInput: 'YYYY-MM-DD',
+      monthYearLabel: 'MMM YYYY',
+      dateA11yLabel: 'LL',
+      monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'purch-req-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css']   
 })
 export class AppComponent {
-
+  
   _Title = "Inicio";
   title = this._Title;
   @Input() progress: number = 0;
@@ -26,6 +40,15 @@ export class AppComponent {
       this.title = this._Title;
     }
   }
+  /**
+   * 
+   * @param title string
+   */
+
+  setTitle(title: string): any {
+    this.title = title;
+  }
+
 
   download() {
     let doc = new jsPDF();
@@ -48,6 +71,11 @@ export class AppComponent {
 
   test() {
     console.log("Accediendo a APP")
+  }
+
+  onNotify(options: {}): void {
+    console.log("APP",options)
+    
   }
   onDeactivate(component) {
     this.setProgress(0);

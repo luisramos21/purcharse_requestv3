@@ -8,6 +8,7 @@ import { ExcelService } from '../../services/excel/excel.service';
 import { Datatable } from 'src/app/views/datatable/datatable';
 import { Columns } from 'src/app/views/datatable/columns';
 import { AppComponent } from 'src/app/app.component';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-datatable',
@@ -38,8 +39,11 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
   @Input() NO_DATA: [{}] = [{
     "DATOS": "NO HAY DATOS DISPONIBLES."
   }];
-  @Input() no_data_columns: string[] = ["DATOS"];
+  @Input() no_data_columns: string[] = ["DATOS"]; 
+  @Input() CHECKBOX_ID :string = "#";
+  @Input() Buttons:boolean = true;
 
+  @Input() ButtonsArray:any = [];
   @Input() data: [{}];
   @Input() columns: string[];
   /* Notifique at current component of the isntance of this class component */
@@ -71,6 +75,23 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
 
   ngOnInit() {
 
+  }
+
+
+  selection = new SelectionModel<any>(true, []);
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataSource.data.forEach(row => this.selection.select(row));
   }
   //pasar datos a controller to component parent
   /**
@@ -149,10 +170,11 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
         let action_remove = false;
         let action_view = false;
         let action_all = false;
+        let action_modal = false;
 
         if (actions && actions[keys[i]]) {
           if (actions[keys[i]].action)
-            action = actions[keys[i]].remove
+            action = actions[keys[i]].action
 
           if (actions[keys[i]].remove)
             action_remove = actions[keys[i]].remove
@@ -165,6 +187,9 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
 
           if (actions[keys[i]].view)
             action_view = actions[keys[i]].view
+
+            if (actions[keys[i]].modal)
+            action_modal = actions[keys[i]].modal
 
           if (actions[keys[i]].mrender)
             render = actions[keys[i]].mrender
@@ -183,6 +208,7 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
             action_view: action_view,
             action_edit: action_edit,
             action_remove: action_remove,
+            action_modal:action_modal,
             get: function () {
               return this.column;
             },
@@ -213,12 +239,24 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
 
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    
     this.app_component.setProgress(100);
     this.app_component.show_progress = false;
+    this.action('updateSpiner',{status:false});
   }
 
   applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue;
+    let value = filterValue.trim();
+    let valueArray = value.split(" ");
+    //console.log(valueArray)
+    if(valueArray.length==1){
+      this.dataSource.filter = filterValue;
+    }else{
+      valueArray.forEach(element => {
+        this.dataSource.filter = element;
+      });
+    }
+    
   }
 
   printComponent(id) {

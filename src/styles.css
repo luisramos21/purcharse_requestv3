@@ -20,7 +20,7 @@ th.mat-sort-header-sorted {
   width: 100%;
 }
 
-.mat-header-buttos-table{
+.mat-header-buttons-table{
   padding: 1em;
   margin-bottom: 1em;
 }
@@ -50,7 +50,7 @@ float: left;
 }
 
 .custom-modalbox .fixActionRow mat-dialog-actions{
-  margin-top: 30%;
+  margin-top: 12%;
   z-index: 999;
 }
 
@@ -90,11 +90,12 @@ float: left;
   background-color: rgba(0,0,0,0.3);
 }
 
+ 
 @media(max-width: 800px) {
   .responsive_table {
       overflow-x: auto !important;
   }
-
+  
   .custom-modalbox  {
     width: 90%;
     height: 70%;
@@ -104,6 +105,29 @@ float: left;
   }
   .mat-table {
       min-width:800px;
+  }
+  .form-new-order{
+    overflow: hidden;
+  }
+}
+
+/* 
+  ##Device = Laptops, Desktops
+  ##Screen = B/w 1025px to 1280px
+*/
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  
+  .custom-modalbox  {
+    width: 65%;
+    height: 70%;
+  }
+  .mat-dialog-actions{
+    margin-top: 15%;
+  }
+  
+  .form-new-order{
+    overflow: hidden;
   }
 }
 
@@ -120,4 +144,62 @@ float: left;
 
 .highlight {
   background:  rgba(211, 11, 11, 0.2); /* red */
+}
+
+/* 
+  ##Device = Tablets, Ipads (portrait)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .custom-modalbox  {
+    width: 85%;
+  }
+  
+  mat-dialog-content , .container-form {
+    overflow: hidden;
+  }
+  
+  
+}
+
+/* 
+  ##Device = Tablets, Ipads (landscape)
+  ##Screen = B/w 768px to 1024px
+*/
+
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  .custom-modalbox  {
+    width: 85%;
+  }
+  
+  .form-new-order{
+    overflow: hidden;
+  }
+  
+}
+
+/* 
+  ##Device = Low Resolution Tablets, Mobiles (Landscape)
+  ##Screen = B/w 481px to 767px
+*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+  
+  .form-new-order{
+    overflow: hidden;
+  }
+  
+}
+
+/* 
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .form-new-order{
+    overflow: hidden;
+  } 
+  
 }

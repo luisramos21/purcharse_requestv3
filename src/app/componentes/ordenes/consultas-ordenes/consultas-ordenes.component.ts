@@ -1,7 +1,9 @@
-import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { DatatableComponent } from '../../datatable/datatable.component';
 import { OrdenesService } from 'src/app/services/ordenes/ordenes.service';
 import { AppComponent } from 'src/app/app.component';
+import { Router } from '@angular/router';
+import { MenuItemsComponent } from '../../menu-items/menu-items.component';
 
 @Component({
   selector: 'app-consultas-ordenes',
@@ -9,6 +11,9 @@ import { AppComponent } from 'src/app/app.component';
   styleUrls: ['./consultas-ordenes.component.css']
 })
 export class ConsultasOrdenesComponent implements AfterViewInit {
+  ngAfterViewInit(): void {
+    
+  }
 
 
   Title: string = "Ordenes - ";
@@ -26,17 +31,42 @@ export class ConsultasOrdenesComponent implements AfterViewInit {
       "all": true
     }
   };
-  constructor(private service: OrdenesService, private app_component: AppComponent) { }
+  constructor(private service: OrdenesService, private  app_component: AppComponent, private router: Router) {  }
 
-  ngAfterViewInit() {
-    this.service.getOrdenesPendientes()
-      .subscribe((data =>
-        this.setDatatable(data, false))
-        , error => this.setDatatable({ "data": [{}], "KEY": [] }, true));
+  ngAfterContentInit() {
+    
+    switch (this.router.url) {
+      case "/ordenes_pendientes":
+        this.setTitle("Ordenes Pendientes");
+        this.service.getOrdenesPendientes()
+          .subscribe((data =>
+            this.setDatatable(data, false))
+            , error => this.setDatatable({ "data": [{}], "KEY": [] }, true));
+        break;
+
+      case "/ordenes_aprobadas":
+        this.setTitle("Ordenes Aprobadas");
+        this.service.getOrdenesAprobadas()
+          .subscribe((data =>
+            this.setDatatable(data, false))
+            , error => this.setDatatable({ "data": [{}], "KEY": [] }, true));
+        break;
+      default:        
+        this.setTitle("NO Controller Ordernes");
+        break;
+    }
+
+
   }
+
+  private setTitle(title: string): void {
+    this.Title = title;
+    this.app_component.title = title;    
+  }
+
   DefColumns: string[] = [
-    "I_req",
-    "N_req",
+    //"I_req",
+    "N_req", 
     "Cant",
     "Descripcion",
     "Codigo_wo",
@@ -49,13 +79,15 @@ export class ConsultasOrdenesComponent implements AfterViewInit {
     "F_requi",
     "Usuario",
     "Observaciones",
-    "Id"];
+    "Acciones"];
 
   setDatatable(data: { "data": [{}], "KEY": string[] }, error: boolean): void {
     this.app_component.setProgress(30);
 
     this.datatable.options__setDataKey = {
       'data': data,
+      'columns_header': this.DefColumns,    
+      'RemoveIndexs': [0],  
       'actions': this.actions,
       'error': error,
     };
@@ -64,7 +96,8 @@ export class ConsultasOrdenesComponent implements AfterViewInit {
   }
 
   onNotify(options: {}): void {
-    this.app_component.test();
+    if(options['action']=="updateSpiner")
+    console.log(options)
   }
 
 }

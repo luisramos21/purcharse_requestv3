@@ -9,5 +9,6 @@ export interface Columns {
     action_edit?:boolean;
     action_remove?:boolean;
     action_view?:boolean;
+    action_modal?:boolean;
     action_all?:boolean;
 }

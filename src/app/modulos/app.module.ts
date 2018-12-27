@@ -13,8 +13,9 @@ import { MenuItemsComponent } from '../componentes/menu-items/menu-items.compone
 import { DatatableComponent } from '../componentes/datatable/datatable.component';
 import { UsuariosComponent } from '../componentes/usuarios/usuarios.component';
 import { OrdenesComponent } from '../componentes/ordenes/ordenes.component';
-import { DialogoComponent, DialogoOverview ,DialogoConfirm} from '../componentes/dialogo/dialogo.component';
-import { ConsultasOrdenesComponent } from '../componentes/ordenes/consultas-ordenes/consultas-ordenes.component';
+import { DialogoComponent, DialogoOverview ,DialogoConfirm,DialogNewOrder} from '../componentes/dialogo/dialogo.component';
+import { ConsultasOrdenesComponent } from '../componentes/ordenes/consultas-ordenes/consultas-ordenes.component'
+import { AddComponent } from '../componentes/ordenes/add/add.component';
 
 @NgModule({
   declarations: [
@@ -27,8 +28,10 @@ import { ConsultasOrdenesComponent } from '../componentes/ordenes/consultas-orde
     OrdenesComponent,
     DialogoComponent,
     DialogoOverview,
+    DialogNewOrder,
     DialogoConfirm,
-    ConsultasOrdenesComponent
+    ConsultasOrdenesComponent,
+    AddComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,7 @@ import { ConsultasOrdenesComponent } from '../componentes/ordenes/consultas-orde
     MaterialModule,
     AppRoutingModule
   ],
-  entryComponents: [DialogoOverview,DialogoConfirm],
+  entryComponents: [DialogoOverview,DialogoConfirm,DialogNewOrder],
   providers: [],
   bootstrap: [AppComponent]
 })

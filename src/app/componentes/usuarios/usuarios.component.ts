@@ -172,8 +172,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
         }
         index++;
       })
-      console.log("this.UsuariosForm: ", 
-      this.UsuariosForm);
+      
       this.dialog.OpenDialog(
         {
           'action': 'EditUser',
@@ -241,9 +240,6 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
     this.datatable._setDataKey(this.datatable.options__setDataKey);
 
     /* GET ALL TYPE OF THE USERS */
-    this.getTypesUsers();
-
-    // this.dialog.OpenDialog({ form: this.UsuariosForm, title: "Nuevo Usuario" });
-  }
+    this.getTypesUsers();  }
 
 }

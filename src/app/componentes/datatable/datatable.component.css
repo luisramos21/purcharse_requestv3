@@ -1,0 +1,19 @@
+table {
+    width: 100%;
+  }
+  
+  .actions{
+    display: flex;
+  }
+
+   th, td , tr, thead {
+    
+    width: auto;
+  
+    margin: 1em;
+    text-align: center;
+    word-spacing: 10%;
+  }
+  th{
+    font-weight: bold;
+  }

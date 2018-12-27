@@ -1,8 +1,8 @@
 <!--  DATOS PARA MOSTRAR-->
 <div class="responsive_table">
 
-  <ng-container class="mat-header-buttos-table">
-    <div style="float: left;">
+  <ng-container class="mat-header-buttons-table">
+    <div style="float: left;" [hidden]="!Buttons">
       <button disabled (click)="printComponent('printpage')" mat-raised-button>
         <mat-icon>print</mat-icon> Imprimir
       </button>
@@ -10,6 +10,24 @@
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEOSURBVEhL7dO9SoNBEIXhVa9Ce2tLQbCwsNPCTrALiK13oI2Vt2FnpaawsRAFSZHLiJW34M+7yc6yzJ4hEFPmwAPfzpn9QghJq/w3mzjCFR4xwcJRL/sVFo56mWJRnXlHF7WoWFTX6qKWFB8/j/ZqcYNDfJXzAJflWV3082ivFqPpKaVbvM4e0wP8RTtHurTlMbZxgt0yM5Z2pnRpyzHWsI6XMjM+fh7t1SL7QH75BoZlZnz8PNqrxQ/2sI8D7OAb/qKdI12suJ+eUnrC8+wx3cFftHOkixUXOEX+JtkZzhFd9PNorxbz+Ph5tFeLeSyqa3VRS4pFdeYNXbaQ/2DXyD/wJ9TlpUZ96CrLTEp/27LgJ8D76zcAAAAASUVORK5CYII=">
         Exportar
       </button>
+    </div>
+    <div style="float: left;" *ngIf="ButtonsArray.length>0">
+      <div *ngFor="let button of ButtonsArray">
+
+        <div *ngIf="button.type =='button'">
+          <button (click)="printComponent('printpage')" mat-raised-button>
+            <mat-icon>print</mat-icon> {{button.title}}
+          </button>
+        </div>
+
+        <div *ngIf="button.type =='link'">
+          <button mat-raised-button color="primary" [routerLink]="button.url">
+            {{button.title}}
+          </button>
+        </div>
+
+      </div>
+
     </div>
     <div style="float: right;">
       <mat-form-field>
@@ -19,23 +37,39 @@
 
   </ng-container>
 
-  <div style="float: none;clear: both;" id="printpage">
-   
-    <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <div style="float: none;clear: both;" id="printpage" class="mat-elevation-z8">
+
+    <table mat-table [dataSource]="dataSource" matSort class="table-responsive">
+
+      <!-- Checkbox Column -->
+      <ng-container [matColumnDef]="CHECKBOX_ID">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+
+          <mat-checkbox (click)="$event.stopPropagation()" [value]="row[CHECKBOX_ID]" (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
 
       <!-- for each Columns-->
-      <ng-container *ngFor="let col of CustomColumns" [matColumnDef]="col.column">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>{{col.title}} </mat-header-cell>
+      <ng-container *ngFor="let col of CustomColumns" [matColumnDef]="col.column != CHECKBOX_ID ?col.column:null">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{col.title}} </th>
+
         <div *ngIf="col.action">
-          <mat-cell *matCellDef="let row">
+          <td mat-cell *matCellDef="let row" class="actions">
             <ng-container *ngIf="col.mrender(col.cell(row)) as value">
 
-              <button (click)='action("edit",value)' style="margin-right: 0.5em;" *ngIf="col.action_edit==true"
+              <button (click)='action("edit",value)' style="margin-right: 0.5em;" *ngIf="col.action_edit"
                 mat-icon-button mat-raised-button>
                 <mat-icon style="color:green;">edit</mat-icon>
               </button>
 
-              <button (click)='action("remove",value)' style="margin-right: 0.5em;" *ngIf="col.action_remove==true"
+              <button (click)='action("remove",value)' style="margin-right: 0.5em;" *ngIf="col.action_remove"
                 mat-icon-button mat-raised-button>
 
                 <svg style="width:24px;height:24px;" viewBox="0 0 24 24">
@@ -43,27 +77,31 @@
                 </svg>
               </button>
 
-              <button (click)='action("view",value)' style="margin-right: 0.5em;" *ngIf="col.action_remove==true"
+              <button (click)='action("view",value)' style="margin-right: 0.5em;" *ngIf="col.action_view"
                 mat-icon-button mat-raised-button>
                 <mat-icon style="color:blue;">info</mat-icon>
               </button>
 
+              <button (click)='action("eye",value)' style="margin-right: 0.5em;" *ngIf="col.action_modal"
+                mat-icon-button mat-raised-button>
+                <mat-icon style="color:#000;">remove_red_eye</mat-icon>
+              </button>
             </ng-container>
-          </mat-cell>
+          </td>
         </div>
 
         <div *ngIf="!col.action">
-          <mat-cell *matCellDef="let row">
-            {{col.mrender(col.cell(row))}}</mat-cell>
+          <td mat-cell *matCellDef="let row">
+            {{col.mrender(col.cell(row))}}
+          </td>
         </div>
 
       </ng-container>
 
 
-      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-
-      <mat-row [ngClass]="{'highlight': row[column_state]==0}" *matRowDef="let row; columns: columns;"></mat-row>
-    </mat-table>
-    <mat-paginator #paginator [pageSizeOptions]="[10, 20,50,100]"  pageSize="20" showFirstLastButtons></mat-paginator>
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    </table>
+    <mat-paginator #paginator [pageSizeOptions]="[10, 20,50,100]" pageSize="10" showFirstLastButtons></mat-paginator>
   </div>
 </div>
