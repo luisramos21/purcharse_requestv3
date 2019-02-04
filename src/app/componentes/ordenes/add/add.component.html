@@ -5,17 +5,17 @@
 
             <mat-form-field>
                 <mat-icon matPrefix>shop</mat-icon>
-                <input matInput disabled title="No. Requisición" [value]="N_Order">
+                <input matInput disabled title="No. Requisición" [value]="N_Order" class="input-icon-margin">
             </mat-form-field>
 
             <mat-form-field>
                 <mat-icon matPrefix>update</mat-icon>
-                <input matInput disabled title="Fecha Requisición" [value]="Date_Order">
+                <input matInput disabled title="Fecha Requisición" [value]="Date_Order" class="input-icon-margin">
             </mat-form-field>
 
             <mat-form-field>
                 <mat-icon matPrefix>person</mat-icon>
-                <mat-select title="Aprobador" [(ngModel)]="aprobador">
+                <mat-select title="Aprobador" [(ngModel)]="aprobador" class="input-icon-margin">
                     <mat-option *ngFor="let aprobador of aprobadores" [value]="aprobador.Id">&nbsp;&nbsp;{{aprobador.username}}</mat-option>
                 </mat-select>
             </mat-form-field>
@@ -29,17 +29,19 @@
             <mat-card>
                 <mat-card-header style="display: inline;">
                     <mat-card-title>
-                        <button (click)="ModalNewOrder()" mat-raised-button color="primary">
+                        <button (click)="ModalNewOrder(false)" mat-raised-button color="primary">
                             <mat-icon>add_shopping_cart</mat-icon> Agregar Producto
                         </button>
                         <button style="margin: 1%;" mat-raised-button color="primary">
                             <mat-icon>search</mat-icon> Buscar Producto
                         </button>
-                        <button style="margin: 1%" mat-raised-button color="primary">
-                            <mat-icon>cloud_upload</mat-icon> Importar Productos
-                        </button>
+                        <label [hidden]="uploading" class="mat-raised-button mat-primary" for="file" style="margin: 1%" mat-raised-button color="primary">
+                            <mat-icon style="vertical-align: middle; margin-right: 0.5em;">cloud_upload</mat-icon> Importar Productos
+                        </label>
 
-                        <button disabled style="margin: 1%;background-color: green;color: #fff;" mat-raised-button>
+                        <input [disabled]="uploading" (change)="uploadProducts()" #file type="file" name="file" id="file"  hidden="hidden"  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                        
+                        <button [disabled]="!status_products" (click)="CrearNuevaOrden()" style="margin: 1%;background-color: green;color: #fff;" mat-raised-button>
                             <mat-icon>shopping_cart</mat-icon> Crear Orden
                         </button>
                     </mat-card-title>
@@ -49,6 +51,11 @@
                     <app-dialog #dialog (notify)='onNotify($event)'></app-dialog>
                     Sus Productos Aparecerán Aqui.
                     <mat-progress-bar mode="determinate" [value]="progress" color="primary"></mat-progress-bar>
+                    <br> 
+                    <button  (click)="RemoveItemsSelected()" mat-raised-button *ngIf="ItemsSelected">
+                        <mat-icon style="color:red;">remove_shopping_cart</mat-icon> Eliminar Seleccionados
+                    </button>
+
                     <app-datatable #datatable (notify)='onNotify($event)' [data]="TableData" [columns]="displayedColumns" [CHECKBOX_ID]="DefColumns[0]">
 
                     </app-datatable>

@@ -51,7 +51,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
       "element": "id",
       "title": "Id",
       "value": "",
-      "inputType":"hidden"
+      "inputType": "hidden"
     },
     {
       "element": "name",
@@ -172,7 +172,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
         }
         index++;
       })
-      
+
       this.dialog.OpenDialog(
         {
           'action': 'EditUser',
@@ -207,6 +207,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
           console.error("Ha habido error al intentar consultar el usuario #" + user)
         })
   }
+  
   viewUser(user: number): void {
 
   }
@@ -240,6 +241,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
     this.datatable._setDataKey(this.datatable.options__setDataKey);
 
     /* GET ALL TYPE OF THE USERS */
-    this.getTypesUsers();  }
+    this.getTypesUsers();
+  }
 
 }

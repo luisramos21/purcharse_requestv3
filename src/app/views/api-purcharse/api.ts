@@ -80,7 +80,7 @@ export class Api {
         },
         "GET_CODE_WO": {
             "url": this.URL + "GET",
-            "data": {                
+            "data": {
                 "qr": "_all",
                 "item": "",
                 "ta": "Sync_products"
@@ -106,7 +106,7 @@ export class Api {
                 "qty": 0,
                 "cost_centre": "",
                 "priority_id": 0,
-                "limit_date":"" ,
+                "limit_date": "",
                 "comments": "",
                 "purchase_request_id": "",
                 "qr": "save",
@@ -118,7 +118,7 @@ export class Api {
             "data": {
                 "qr": "delete",
                 "ta": "temp_products",
-                "in":0
+                "in": 0
             }
         },
         "GET_PRODUCT_TEMP": {
@@ -126,7 +126,17 @@ export class Api {
             "data": {
                 "qr": "_all",
                 "ta": "temp_products",
-                "id":0
+                "id": 0
+            }
+        },
+        "UPLOAD_PRODUCTS": {
+            "url": this.URL + "GET",
+            "data": {
+                /*"file":null,*/
+                "qr": "",
+                "co": "ImportProducts",
+                "purchase_request_id": 0,
+                "isq": false
             }
         }
     };

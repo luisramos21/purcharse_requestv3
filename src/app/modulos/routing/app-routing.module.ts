@@ -11,7 +11,7 @@ import { AddComponent } from 'src/app/componentes/ordenes/add/add.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/usuarios',
+    redirectTo: '/ordenes/add',
     pathMatch: 'full'
   },
   {
