@@ -252,10 +252,6 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
 
       this.app_component.setProgress(60);
       this.columns = this.CustomColumns.map(c => c.column);
-<<<<<<< HEAD
-=======
-      //      console.log(this.CustomColumns, this.columns_header)
->>>>>>> b927fc9f657391bf1eb2f455e2857f3df6b6e910
       this._setData(this.data);
       this.update(this.data);
     } else {
