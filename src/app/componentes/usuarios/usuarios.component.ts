@@ -310,11 +310,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
           console.error("Ha habido error al intentar consultar el usuario #" + user)
         })
   }
-<<<<<<< HEAD
-
-=======
   
->>>>>>> b927fc9f657391bf1eb2f455e2857f3df6b6e910
   viewUser(user: number): void {
 
   }
