@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api.service';
 import { HttpClient } from '@angular/common/http';
+import { User } from 'src/app/views/usuarios/user';
 
 
 @Injectable({
@@ -22,13 +23,39 @@ export class UsuariosService extends ApiService {
     return Observable<any>
    </pre>
    */
+  cleanId():void{
+    this._api.cleanItem("GET_USERS","id");;
+  }
+
   getUsers(user?: number): Observable<any> {
     let json = this._api.get("GET_USERS");
-    if (user) {
+    if (user) {   
+      
+
       json = this._api.PropData({
         'action': "GET_USERS", 'add': {
           'id': user
         }
+      })
+    }
+    return this._post(json);
+  }
+
+  /*
+  <pre>
+    @param 
+      user:number optional
+    @descrition
+      get Users to database , for post data
+    return Observable<any>
+   </pre>
+   */
+  saveUser(user:User): Observable<any> {
+
+    let json = this._api.get("SAVE_USER");
+    if (user) {
+      json = this._api.PropData({
+        'action': "SAVE_USER", 'add': user
       })
     }
     return this._post(json);

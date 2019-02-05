@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api.service';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import {  Product} from 'src/app/views/product/product';
-import {  Producto} from 'src/app/views/product/producto';
-import {  ProductData} from 'src/app/views/product/product-data';
+import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
+import { Observable, Subject } from 'rxjs';
+import { Product } from 'src/app/views/product/product';
+import { Producto } from 'src/app/views/product/producto';
+import { ProductData } from 'src/app/views/product/product-data';
 
 
 @Injectable({
@@ -23,7 +23,7 @@ export class ProductsService extends ApiService {
     let json = this._api.get("ALL_PRODUCTS_TEMP");
 
     if (req) {
-      console.log("req : ",req)
+
       json = this._api.PropData({
         'action': "ALL_PRODUCTS_TEMP", 'add': {
           'purchase_request_id': req
@@ -53,14 +53,20 @@ export class ProductsService extends ApiService {
   /**
    * This method the send post data for save in database
    * @param product Product
-   */ 
+   */
 
-  saveTemProduct(product: Product): Observable<any> {
+  saveTemProduct(product: Product, update?: boolean): Observable<any> {
     let json = this._api.get("SAVE_PRODUCT_TEMP");
 
     if (product) {
+      if (update && typeof product['id'] != 'undefined') {
+        product['_id'] = product['id'];
+        product['qr'] = "update";
+        delete product['id'];
+      }
+
       json = this._api.PropData({
-        'action': "SAVE_PRODUCT_TEMP", 
+        'action': "SAVE_PRODUCT_TEMP",
         'add': product
       })
     }
@@ -72,18 +78,33 @@ export class ProductsService extends ApiService {
    * @param id number
    */
 
-  removeTemProduct(id: number): Observable<any> {
+  removeTemProduct(id: any): Observable<any> {
     let json = this._api.get("REMOVE_PRODUCT_TEMP");
 
     if (id) {
+
       json = this._api.PropData({
-        'action': "REMOVE_PRODUCT_TEMP", 
+        'action': "REMOVE_PRODUCT_TEMP",
         'add': {
-          "ind":id
+          "in": id
         }
-      }) 
+      })
     }
     return this._post(json);
   }
 
+  /**
+   * Upload File   
+   * 
+   * */
+  public _UploadFile(file: File,extra?:{}): Observable<any> {
+
+    let json = this._api.get("UPLOAD_PRODUCTS");
+    json = this._api.PropData({
+      'action': "UPLOAD_PRODUCTS",
+      'add': extra
+    })
+    return this._postFile(file,json);
+  }
 }
+

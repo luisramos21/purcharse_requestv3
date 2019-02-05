@@ -1,7 +1,7 @@
 export class Api {
 
-    public URL: string = "http://localhost:808/api/purcharse_request/";
-    //public URL: string = "http://localhost/api/purcharse_request/";
+    //public URL: string = "http://localhost:808/api/purcharse_request/";
+    public URL: string = "http://localhost/api/purcharse_request/";
     public _method: string = '';
     public data: {};
 
@@ -13,6 +13,23 @@ export class Api {
             {
                 'qr': 'user'
                 /*'id': ''*/
+            }
+        },
+        "SAVE_USER":
+        {
+            "url": this.URL + "GET",
+            "data":
+            {
+                _id:"",
+                name: "",
+                lastname: "",
+                username: "",
+                password: "",
+                email: "",
+                user_type_id: "",
+                state: "",
+                ta: "users",
+                qr: "save"
             }
         },
         "GET_USER_TYPE":
@@ -80,7 +97,7 @@ export class Api {
         },
         "GET_CODE_WO": {
             "url": this.URL + "GET",
-            "data": {                
+            "data": {
                 "qr": "_all",
                 "item": "",
                 "ta": "Sync_products"
@@ -106,7 +123,7 @@ export class Api {
                 "qty": 0,
                 "cost_centre": "",
                 "priority_id": 0,
-                "limit_date":"" ,
+                "limit_date": "",
                 "comments": "",
                 "purchase_request_id": "",
                 "qr": "save",
@@ -118,7 +135,7 @@ export class Api {
             "data": {
                 "qr": "delete",
                 "ta": "temp_products",
-                "in":0
+                "in": 0
             }
         },
         "GET_PRODUCT_TEMP": {
@@ -126,10 +143,24 @@ export class Api {
             "data": {
                 "qr": "_all",
                 "ta": "temp_products",
-                "id":0
+                "id": 0
+            }
+        },
+        "UPLOAD_PRODUCTS": {
+            "url": this.URL + "GET",
+            "data": {
+                /*"file":null,*/
+                "qr": "",
+                "co": "ImportProducts",
+                "purchase_request_id": 0,
+                "isq": false
             }
         }
     };
+
+    public cleanItem(prop:string,item:string):void{
+        delete this.URL_DATA[prop]["data"][item];
+    }
 
     public PropData(options: { 'action', 'add' }): { 'url', 'data' } {
 

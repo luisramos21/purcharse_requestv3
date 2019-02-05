@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar, MatSelect } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar, MatSelect, MatDatepickerInput } from '@angular/material';
 import { AppComponent } from 'src/app/app.component';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -90,7 +90,8 @@ export class DialogoConfirm {
 
   constructor(
     private dialogRef: MatDialogRef<DialogoConfirm>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) {       
+    }
 
   close(): void {
     this.dialogRef.close();
@@ -112,6 +113,7 @@ export class DialogNewOrder {
 
   myControl = new FormControl();
   options: wo[] = [];
+  description_disabled:boolean = false;
 
 
   @ViewChild("Input_cost_centre") Input_cost_centre: ElementRef;
@@ -121,9 +123,7 @@ export class DialogNewOrder {
   @ViewChild("Input_sub_cost_centre") Input_sub_cost_centre: MatSelect;
   @ViewChild("Input_priority_id") Input_priority_id: MatSelect;
   @ViewChild("Input_Qty") Input_Qty: ElementRef;
-
-
-
+  
   filteredOptions: Observable<wo[]>;
 
   constructor(
@@ -131,7 +131,16 @@ export class DialogNewOrder {
     private service: OrdenesService,
     public snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.setOptions(this.options);
+    this.setOptions(this.options); 
+    
+    if(this.data.product.fomplus_code !=""){
+      let item:wo = {
+        code_wo:this.data.product.fomplus_code,
+        descripction:this.data.product.description
+      }
+      this.data.product.fomplus_code = item;
+      this.description_disabled = true;
+    }
   }
 
 
@@ -166,32 +175,51 @@ export class DialogNewOrder {
     } else if (!this.data.product.priority_id || this.data.product.priority_id == "" || this.data.product.priority_id == 0) {
       this.showMessaje("Por favor digite una prioridad válida.")
       this.Input_priority_id.focus();
-    } else if (this.data.product.priority_id == 5 && this.data.product.limit_date == "") {
+    } else if (this.data.product.priority_id == 5 && this.data.product.limit_date == "" && !this.data.product.limit_date) {
+      console.log(this.data.product)
       this.showMessaje("Por favor digite una fecha limite válida.")
       this.Input_limit_date.nativeElement.focus();
     } else {
       this.dialogRef.close(this.data);
     }
   }
+  /**
+   * muestra o no nuestra las opciones
+   * @param item wo
+   */
   displayFn(item?: wo): string | undefined {
     return item ? item.code_wo : undefined;
   }
-
+  /**
+   * 
+   * @param filter string
+   */
   private _filter(filter: string): wo[] {
     const filterValue = filter.toLowerCase();
     return this.options.filter(option => this.selectedCodeWO(filterValue, option));
   }
-
+  /**
+   * selecciona y escribe en el campo centro de costo 
+   * tomando el sub centro y el centro de costo
+   * @param $event 
+   */
+  
   CenterCost($event) {
     if (this.data.CentreCoste && this.data.subCentreCoste) {
       this.data.product.cost_centre = this.data.CentreCoste + this.data.subCentreCoste;
     }
   }
 
+/**
+ * Verifica el codigo escrito y si lo encuentra lo selecciona
+ * y deshabilita el campo descripcion 
+ * @param filter string
+ * @param item wo
+ */
   private selectedCodeWO(filter: string, item: wo): boolean {
     let status = item.code_wo.toLowerCase().indexOf(filter) === 0
     if (status) {
-      this.Input_description.nativeElement.disabled = true;
+      //this.Input_description.nativeElement.disabled = true;
       this.data.product.description = item.descripction;
       this.data.product.fomplus_code = item.code_wo;
     }
@@ -204,7 +232,6 @@ export class DialogNewOrder {
  * @param $event 
  * 
  */
-
   CheckCodigo($event): void {
     
     let find_code = false;
@@ -251,6 +278,10 @@ export class DialogNewOrder {
       ), error => this.setOptions([])
 
   }
+  /**
+   * agrega las opciones en autocomplete
+   * @param options wo[]
+   */
   private setOptions(options: wo[]) {
     if (options.length == 0) {
       return;

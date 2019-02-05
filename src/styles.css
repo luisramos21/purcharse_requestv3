@@ -46,7 +46,7 @@ float: left;
 
 .custom-modalbox  {
   width: 25%;
-  height: 90%;
+  height: 95%;
 }
 
 .custom-modalbox .fixActionRow mat-dialog-actions{
@@ -202,4 +202,58 @@ float: left;
     overflow: hidden;
   } 
   
+}
+.snack-Bar-5{  
+  position: absolute;
+  top: 5%;
+  right: 0%;
+}
+
+.snack-Bar-10{  
+  position: absolute;
+  top: 10%;
+  right: 0%;
+}
+
+.snack-Bar-15{  
+  position: absolute;
+  top: 15%;
+  right: 0%;
+}
+
+.snack-Bar-20{  
+  position: absolute;
+  top: 20%;
+  right: 0%;
+}
+.snack-Bar-25{  
+  position: absolute;
+  top: 25%;
+  right: 0%;
+}
+.snack-Bar-30{  
+  position: absolute;
+  top: 30%;
+  right: 0%;
+}
+.snack-Bar-35{  
+  position: absolute;
+  top: 35%;
+  right: 0%;
+}
+.snack-Bar-40{  
+  position: absolute;
+  top: 40%;
+  right: 0%;
+}
+.snack-Bar-45{  
+  position: absolute;
+  top: 45%;
+  right: 0%;
+}
+
+.snack-Bar-50{  
+  position: absolute;
+  top: 50%;
+  right: 0%;
 }

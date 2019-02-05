@@ -54,6 +54,7 @@ export class OrdenesComponent implements AfterViewInit {
   }
 
   setDatatable(data: any, error: boolean): void {
+    
     this.app_component.setProgress(30);
     this.datatable.options__setDataKey = {
       'data': data,

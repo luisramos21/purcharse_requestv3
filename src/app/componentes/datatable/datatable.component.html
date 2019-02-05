@@ -50,7 +50,7 @@
         </th>
         <td mat-cell *matCellDef="let row">
 
-          <mat-checkbox (click)="$event.stopPropagation()" [value]="row[CHECKBOX_ID]" (change)="$event ? selection.toggle(row) : null"
+          <mat-checkbox (click)="$event.stopPropagation()" [value]="row[CHECKBOX_ID]" (change)="CkeckItem($event,row,selection)"
             [checked]="selection.isSelected(row)">
           </mat-checkbox>
         </td>

@@ -5,6 +5,8 @@ import { Columns } from 'src/app/views/datatable/columns';
 import { Usuarios } from 'src/app/views/usuarios/usuarios';
 import { AppComponent } from 'src/app/app.component';
 import { DialogoComponent } from '../dialogo/dialogo.component';
+import { MatSnackBar } from '@angular/material';
+import { User } from 'src/app/views/usuarios/user';
 
 @Component({
   selector: 'app-usuarios',
@@ -32,7 +34,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
       "action": true,
       "edit": true,
       "remove": true,
-      "view": true,
+      "view": false,
       "all": true
     },
     "Estado": {
@@ -51,7 +53,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
       "element": "id",
       "title": "Id",
       "value": "",
-      "inputType":"hidden"
+      "inputType": "hidden"
     },
     {
       "element": "name",
@@ -60,6 +62,10 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
     }, {
       "element": "lastname",
       "title": "Apellidos",
+      "value": ""
+    }, {
+      "element": "email",
+      "title": "Email",
       "value": ""
     }, {
       "element": "state",
@@ -94,30 +100,126 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
   TypeUsersOptions: any = [];
 
   constructor(private service: UsuariosService,
-    private app_component: AppComponent) { }
+    private app_component: AppComponent, private snackBar: MatSnackBar) { }
 
   onNotify(options: {}): void {
+
     if (options['action'] == "edit") {
+
       this.getUser(options['data']);
-    }
-    if (options['action'] == "remove")
+    } else if (options['action'] == "EditUser") {
+
+      this.PrepareUser(options);
+
+    } else if (options['action'] == "remove") {
+
       this.removeUser(options['data']);
 
-    if (options['action'] == "remove")
+    } else if (options['action'] == "remove") {
+
       this.viewUser(options['data']);
+
+    }
+
 
     console.log("onNotify : UsuariosComponent", options)
     //this.app_component.test();
   }
 
+  /*Prepare Structure for save in table user */
+
+  PrepareUser(options: {}): any {
+
+    if (typeof options["data"] != 'undefined' &&  typeof options["data"]["form"] != 'undefined') {
+      var tempUser: User = {
+        _id: 0,
+        name: "",
+        lastname: "",
+        username: "",
+        password: "",
+        email: "",
+        user_type_id: 0,
+        state: 0,
+        qr: "save"
+      };
+      var data = options["data"]["form"];
+      console.log(data)
+      /** Save User interface */
+      for (let i in data) {
+
+        if (data[i]["element"] == 'state') {
+          data[i]["value"] = data[i]["value"] == true ? 1 : 0;
+        }
+
+        if (data[i]["element"] == 'id') {
+          data[i]["element"] = "_id";
+        }
+        if (typeof tempUser[`${data[i]["element"]}`] == 'undefined') {
+          tempUser[`${data[i]["element"]}`] = "";
+        }
+
+        tempUser[`${data[i]["element"]}`] = data[i]["value"];
+      }
+      if (tempUser._id > 0) {
+        tempUser.qr = "update";
+      }
+
+      /*send User to service */
+      this.setUser(tempUser);
+    }
+  }
+
   getUser(user: number): void {
+
     this.service.getUsers(user)
-      .subscribe((data =>
-        this._editUser(data, false))
+      .subscribe(data => {
+        this.service.cleanId();
+        this._editUser(data, false);
+      }
         , error => this._editUser([], true))
+
+  }
+
+  setUser(user: User): void {
+    this.service.saveUser(user)
+      .subscribe(data => {
+        this.showMessaje("Usuario Guardado");
+        this.listOfUsers();
+      }, (error) => {
+        this.showMessaje("No se pudo Guardar el Usuario");
+      })
+  }
+
+  private showMessaje(message: string, clase?: string[] | string, duracion?: number, callback?: Function, new_messaje?: boolean) {
+
+    let duration: number = 1000;
+    let _clase: string | string[] = ['clase'];
+
+    if (duracion) {
+      duration = duracion;
+    }
+
+    if (clase) {
+      _clase = clase;
+    }
+    let snackBar = this.snackBar;
+    if (new_messaje) {
+      //snackBar = MatSnackBar;
+    }
+    snackBar.open(message, "Aceptar", {
+      duration: duration,
+      panelClass: _clase
+    });
+    if (callback) {
+      this.snackBar._openedSnackBarRef.afterDismissed().subscribe(() => {
+        callback();
+      });
+    }
+
   }
 
   getTypesUsers(): void {
+
     if (!this.UsersTypes) {
       this.app_component.setProgress(30);
       this.service.getUserTypes()
@@ -172,7 +274,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
         }
         index++;
       })
-      
+
       this.dialog.OpenDialog(
         {
           'action': 'EditUser',
@@ -183,6 +285,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
       this.app_component.setProgress(100);
     }
   }
+
   public test(): void {
     alert("Test")
   }
@@ -207,6 +310,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
           console.error("Ha habido error al intentar consultar el usuario #" + user)
         })
   }
+
   viewUser(user: number): void {
 
   }
@@ -221,13 +325,16 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
   }
 
   listOfUsers(): void {
+
     this.service.getUsers()
-      .subscribe((data =>
-        this.setDatatable(data, false))
+      .subscribe(data => {
+        this.setDatatable(data, false)
+      }
         , error => this.setDatatable([], true));
   }
 
   setDatatable(data: any, error: boolean): void {
+
     this.app_component.setProgress(30);
     this.datatable.options__setDataKey = {
       'data': data,
@@ -238,8 +345,9 @@ export class UsuariosComponent implements OnInit, AfterViewInit, Usuarios {
     };
 
     this.datatable._setDataKey(this.datatable.options__setDataKey);
-
+    
     /* GET ALL TYPE OF THE USERS */
-    this.getTypesUsers();  }
+    this.getTypesUsers();
+  }
 
 }

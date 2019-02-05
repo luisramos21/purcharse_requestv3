@@ -39,11 +39,11 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
   @Input() NO_DATA: [{}] = [{
     "DATOS": "NO HAY DATOS DISPONIBLES."
   }];
-  @Input() no_data_columns: string[] = ["DATOS"]; 
-  @Input() CHECKBOX_ID :string = "#";
-  @Input() Buttons:boolean = true;
+  @Input() no_data_columns: string[] = ["DATOS"];
+  @Input() CHECKBOX_ID: string = "#";
+  @Input() Buttons: boolean = true;
 
-  @Input() ButtonsArray:any = [];
+  @Input() ButtonsArray: any = [];
   @Input() data: [{}];
   @Input() columns: string[];
   /* Notifique at current component of the isntance of this class component */
@@ -80,18 +80,50 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
 
   selection = new SelectionModel<any>(true, []);
 
+  get_selection(): number {
+    return this.selection.selected.length;
+  }
+
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
+    const numSelected = this.get_selection();
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
+  SendSelected(): void {
+    this.action("Items_selection", this.selection.selected)
+    this.ClearSelected();
+  };
+
+  CkeckItem($event: Event, row: any, selection: { toggle: (arg0: any) => void; }) {
+    let result = $event ? selection.toggle(row) : null;
+    this.action("Items_selection", this.selection.selected)
+    return result;
+  }
+
+  ClearSelected(): void {
+    this.selection.clear();
+  }
+
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+
+    if (this.isAllSelected() || typeof this.dataSource.data == 'undefined') {
+      this.selection.clear();
+    } else {
+      let i:number = 0;
+      this.dataSource.data.forEach((row) => {
+        if (i <  this.dataSource.paginator.pageSize) {
+          this.selection.select(row)
+        };
+        i++;
+      });
+    }
+
+
+    this.action("Items_selection", this.selection.selected)
+
   }
   //pasar datos a controller to component parent
   /**
@@ -151,18 +183,18 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
       }
     }
 
-    if (!keys && !this.data) {
+    if (!this.data) {
       this.data = this.NO_DATA;
       keys = this.no_data_columns;
       this.columns_header = this.no_data_columns;
     }
 
-    if (this.columns_header.length > 0 && keys) {
+    if (this.columns_header.length > 0 && keys.length > 0) {
 
       for (let i = 0; i < this.columns_header.length; i++) {
         //defaut render columns if change value in row 
         let render = function (data) {
-          return data=='null'?'':data;
+          return data == 'null' ? '' : data;
         };
 
         let action = false;
@@ -188,7 +220,7 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
           if (actions[keys[i]].view)
             action_view = actions[keys[i]].view
 
-            if (actions[keys[i]].modal)
+          if (actions[keys[i]].modal)
             action_modal = actions[keys[i]].modal
 
           if (actions[keys[i]].mrender)
@@ -208,7 +240,7 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
             action_view: action_view,
             action_edit: action_edit,
             action_remove: action_remove,
-            action_modal:action_modal,
+            action_modal: action_modal,
             get: function () {
               return this.column;
             },
@@ -220,9 +252,8 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
 
       this.app_component.setProgress(60);
       this.columns = this.CustomColumns.map(c => c.column);
-//      console.log(this.CustomColumns, this.columns_header)
       this._setData(this.data);
-      this.update();
+      this.update(this.data);
     } else {
       console.error("this.columns_header not found")
     }
@@ -232,31 +263,32 @@ export class DatatableComponent implements OnInit, AfterViewInit, Datatable {
     if (_data) {
       this._setData(_data);
     }
-
-    if (!this.dataSource || _data) {
+   
+    if (!this.dataSource || _data) {     
       this.dataSource = new MatTableDataSource(this.data);
     }
+    if (this.data) {
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    }
 
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    
     this.app_component.setProgress(100);
     this.app_component.show_progress = false;
-    this.action('updateSpiner',{status:false});
+    this.action('updateSpiner', { status: false });
   }
 
   applyFilter(filterValue: string) {
     let value = filterValue.trim();
     let valueArray = value.split(" ");
     //console.log(valueArray)
-    if(valueArray.length==1){
+    if (valueArray.length == 1) {
       this.dataSource.filter = filterValue;
-    }else{
+    } else {
       valueArray.forEach(element => {
         this.dataSource.filter = element;
       });
     }
-    
+
   }
 
   printComponent(id) {

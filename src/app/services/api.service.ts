@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
+import { Observable, throwError, Subject } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 import { Api } from 'src/app/views/api-purcharse/api';
 
 @Injectable({
@@ -18,31 +18,57 @@ import { Api } from 'src/app/views/api-purcharse/api';
 		Header add Access-Control-Allow-Methods: "GET,POST,OPTIONS,DELETE,PUT"
 	</IfModule>
    */
-  
+
 export class ApiService {
   _api: Api;
 
   constructor(private http: HttpClient) {
     this._api = new Api();
   }
-  
-  public _post(options:{data,method?,url?}): Observable<any> {
+
+  public _post(options: { data, method?, url?}): Observable<any> {
     let data = JSON.stringify(options.data);
-   
+
     let _url = "";
-    if( options.method){
-      _url = this._api.URL+options.method;
+    if (options.method) {
+      _url = this._api.URL + options.method;
     }
-    if(options.url){
+    if (options.url) {
       _url = options.url;
-    }   
+    }
 
     return this.http.post(_url, data)
       .pipe(
+        retry(10),
         catchError(this.handleError)
       );
 
   }
+
+  public _postFile(file: File, options: { data, method?, url?}): Observable<any> {
+    const data: FormData = new FormData();
+    data.append('file', file, file.name);
+    
+    for (let i in options['data']) {
+      data.append(i, options['data'][i]);
+    }
+
+    let _url = "";
+    if (options.method) {
+      _url = this._api.URL + options.method;
+    }
+    if (options.url) {
+      _url = options.url;
+    }
+
+    return this.http.post(_url, data)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      );
+
+  }
+
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

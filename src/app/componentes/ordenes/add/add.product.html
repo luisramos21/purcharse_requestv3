@@ -2,8 +2,9 @@
     <h1 mat-dialog-title>{{data.title}} </h1>
     <div mat-dialog-content class="container-form form-new-order" style="max-height: 100%;">
 
-        <mat-form-field>
-            <input matInput   [(ngModel)]="data.product.fomplus_code" cdkFocusInitial (keyup)="BuscarCodigo($event)" [formControl]="myControl"
+        <mat-form-field>           
+
+            <input matInput   [(ngModel)]="data.product.fomplus_code"  cdkFocusInitial (keyup)="BuscarCodigo($event)" [formControl]="myControl"
             [matAutocomplete]="auto" placeholder="Codigo WO">
 
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
@@ -14,7 +15,7 @@
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput #Input_description [(ngModel)]="data.product.description" placeholder="Descripción : ">
+            <input matInput #Input_description  [disabled]="description_disabled" [(ngModel)]="data.product.description" placeholder="Descripción : ">
         </mat-form-field>
 
         <mat-form-field>
@@ -76,7 +77,8 @@
         </mat-form-field>
 
         <mat-form-field>
-            <textarea [(ngModel)]="data.product.comments" matInput placeholder="Comentarios"></textarea>
+            
+            <textarea [(ngModel)]="data.product.comments"  [rows]="data.rows*2" matInput placeholder="Comentarios"></textarea>
         </mat-form-field>
     </div>
 

@@ -11,7 +11,7 @@ table {
     width: auto;
   
     margin: 1em;
-    text-align: center;
+    /*text-align: center;*/
     word-spacing: 10%;
   }
   th{
